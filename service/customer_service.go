@@ -24,14 +24,26 @@ func (s customerService) GetCustomers() ([]CustomerResponse, error) {
 	for _, customer := range customers {
 		custResponse := CustomerResponse{
 			CustomerID: customer.CustomerID,
-			Name: customer.Name,
-			Status: customer.Status,
+			Name:       customer.Name,
+			Status:     customer.Status,
 		}
 		custResponses = append(custResponses, custResponse)
 	}
 	return custResponses, nil
 }
 
-func (s customerService) GetCustomer(int) (*CustomerResponse, error) {
-	return nil, nil
+func (s customerService) GetCustomer(id int) (*CustomerResponse, error) {
+	customer, err := s.custRepo.GetById(id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	custResponse := CustomerResponse{
+		CustomerID: customer.CustomerID,
+		Name:       customer.Name,
+		Status:     customer.Status,
+	}
+
+	return &custResponse, nil
 }
